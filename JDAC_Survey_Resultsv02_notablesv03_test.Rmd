@@ -1,0 +1,792 @@
+---
+title: <div style="margin:20px">JDAC Pulse Survey Results</div>
+#subtitle: <div style="margin:20px"></div>
+author: "September 2022"
+date: "Updated: `r Sys.Date()`"
+output:
+  html_document:
+    number_sections: no
+    theme: cerulean
+    highlight: kate
+    toc: yes
+    toc_float: yes
+    collapsed: yes
+    smooth_scroll: yes
+    rmdformats::readthedown: null
+    self_contained: yes
+    thumbnails: yes
+    lightbox: yes
+    gallery: yes
+    keep_md: yes
+    figure_keep: yes
+  
+---
+
+<style>
+
+.list-group-item.active, .list-group-item.active:focus, 
+.list-group-item.active:hover {
+  background-color: #3f366d;
+  
+}
+
+.title {
+  text-align: center;
+    color: #3f366d;
+}
+
+.author {
+  text-align: right;
+  color: #3f366d;
+}
+
+.date {
+  text-align: right;
+  color: #3f366d;
+}
+
+.number_sections {
+  color: #3f366d;
+}
+
+</style>
+
+<script type="text/javascript">
+$(function)() {
+$('.navbar-left').before($('.logo'));
+
+})
+</script>
+
+<div class="logo pull-left">
+<img src="logo.png" alt="logo" width="140"
+style="margin-top: -280px;">
+</div>
+
+<style type="text/css">
+caption, .table-caption {
+text-align:left; font-weight: bold;
+}
+</style>
+
+```{r setup, include=FALSE}
+#install.packages("readxl")
+library(readxl)
+library(tidyverse)
+#install.packages("dplyr")
+#install.packages("likert")
+library(dplyr)
+library(broom)
+library(plotly)
+library(scales)
+library(likert)
+library(knitr)
+library(kableExtra)
+library(gtsummary)
+library(AER)
+library(DT)
+library(here)
+library(tinytex)
+library(webshot2)
+
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  collapse = TRUE,
+  comment = ""
+)
+
+setwd("/Users/katrina.ihebunezie/Downloads")
+
+data <- read_excel("JDAC Pulse Survey v2 (Responses).xlsx")
+
+f <- data%>%
+  select(c(7:9)) %>%
+  mutate_if(is.character, as.factor)
+
+g <- f %>% mutate_at(
+  vars(starts_with("How much core training and development are you doing?")),
+  funs(case_when(
+    .=="Very little"~1,
+    .=="Some, but not enough"~2,
+    .=="The right amount"~3,
+   ))
+  
+  
+  
+  
+)
+
+g[is.na(g)] = 1
+
+#Body <font face="Copperplate Gothic Light" size = 20></font>
+#Header font-family: Copperplate Gothic Light
+```
+
+```{r, echo=FALSE}
+yy <- data%>%
+  select(c(7:9)) %>%
+  mutate_if(is.character, as.factor)
+
+ee <- yy %>% mutate_at(
+  vars(starts_with("How much wider development training and development are you doing?")),
+  funs(case_when(
+    .=="Very little"~1,
+    .=="Some, but not enough"~2,
+    .=="The right amount"~3,
+   ))
+  
+  
+  
+  
+)
+
+ee[is.na(ee)] = 1
+
+```
+
+```{r, include = FALSE}
+
+data$`Which DD group are you in?` <- as.factor(data$`Which DD group are you in?`)
+
+data$`My wellbeing overall in my life is...` <- as.factor(data$`My wellbeing overall in my life is...`)
+
+data$`My wellbeing at work is...` <- as.factor(data$`My wellbeing at work is...`)
+
+data$`My wellbeing overall in my life is...` <- as.factor(data$`My wellbeing overall in my life is...`)
+
+data$`My workload is...` <- as.factor(data$`My workload is...`)
+
+data$`How well do you feel your day-to-day job matches your interests and skills?` <- as.factor(data$`How well do you feel your day-to-day job matches your interests and skills?`)
+
+data$`How well is it going working in JDAC?` <- as.factor(data$`How well is it going working in JDAC?`)
+
+data$`How well is it going working in your DD team?` <- as.factor(data$`How well is it going working in your DD team?`)
+
+data$`How clear are your goals?` <- as.factor(data$`How clear are your goals?`)
+
+data$`How much core training and development are you doing?` <- as.factor(data$`How much core training and development are you doing?`)
+
+data$`How much wider development training and development are you doing?` <- as.factor(data$`How much wider development training and development are you doing?`)
+
+data$`Do you need to do a mid-year review?` <- as.factor(data$`Do you need to do a mid-year review?`)
+
+#data$`How satisfied were you overall with the content?` <- as.factor(data$`How satisfied were you overall with the content?`)
+
+data$`How well do you understand the mid-year review process?` <- as.factor(data$`How well do you understand the mid-year review process?`)
+
+data$`Do you know who to contact for support if you have any concerns/questions about the mid-year review?` <- as.factor(data$`Do you know who to contact for support if you have any concerns/questions about the mid-year review?`)
+
+#data$`How prepared do you feel for your mid-year review?` <- as.factor(data$`How prepared do you feel for your mid-year review?`)
+
+data$`Are you having development conversations with your line manager even though you are exempt from the mid-year review?` <- as.factor(data$`Are you having development conversations with your line manager even though you are exempt from the mid-year review?`)
+```
+
+### <span style="color:#ffffff">Contents</span>
+
+```{r, echo=FALSE}
+```
+
+## <span style="color:#3f366d">Results and Discussion</span>
+
+
+```{r, echo=FALSE}
+
+library(readxl)
+library(AER)
+library(gtsummary)
+
+library(readxl)
+JDAC_Pulse_Survey_v2_Responses_ <- read_excel("C:/Users/katrina.ihebunezie/Downloads/JDAC Pulse Survey v2 (Responses).xlsx")
+
+
+my_theme <-
+  list(
+    "as_gt-lst:addl_cmds" = list(
+      tab_spanner = rlang::expr(gt::tab_options(table.font.size = 'small')),
+      user_added1 = rlang::expr(gt::tab_source_note(
+        source_note = "Source: Internal data")),
+      user_added2 = rlang::expr(gt::opt_row_striping()),
+      user_added3 = rlang::expr(gt::opt_table_lines("none"))
+      )
+    )
+  
+reset_gtsummary_theme()
+set_gtsummary_theme(my_theme)
+```
+### <span style="color:#3f366d">Summary</span>
+- The majority of respondents are fulfilled by their work and are satisfied with their DD team and JDAC as a whole.  Although the majority of participants felt that their workload was ‘just right’, seven respondents (30%) felt their workload was ‘a bit heavy’.
+-   Ten respondents (44%) expressed that their wellbeing at work or home was either ‘in a really good place’ or ‘in an ok place’.  However, thirteen participants felt slightly less optimistic about their wellbeing - ten (44%) reported there were areas at work that could be improved, while three (13%) were concerned that their wellbeing may be negatively impacted if their experience at work worsened/ remained unchanged.
+- Most teams across JDAC felt fairly prepared and adequately supported for their mid-year reviews
+- Although ten (63%) respondents expressed that they were having monthly developmental conversations with their line managers, two (13%) noted such conversations occurred less regularly and four (25%) disclosed they had yet to receive one
+- Most respondents would like more training and development offers. This highlights the importance of potentially exploring training need gaps across JDAC to develop even more training opportunities
+
+
+
+
+### <span style="color:#3f366d">Monthly Questions</span>
+
+#### <span style="color:#3f366d">Wellbeing at Work and in Life</span>
+
+Of the 80 people approached, 23 participated (response rate = 30%) (Fig. 1).  
+
+<br> <span style ="color:#000000; font-weight: 700">Fig. 1. Participant Demographics (by Team and Grade)</span> <br>
+```{r, image_grobs3, fig.show="hold", out.width="50%", fig.align="default"}
+
+knitr::include_graphics("Demo_1.png", error = FALSE)
+knitr::include_graphics("Demo_2.png", error = FALSE)
+
+#<span style ="color:#000000; font-size: 120%; font-weight: 545">Fig. 1 Wellbeing at Work</span>
+
+```
+
+The majority of respondents (87%) expressed they were either 'in a really good place' (44%, 10) or 'in an ok place, but there are things I'd like to improve' whilst at work respectively (44%, 10) (Fig. 2).
+
+<br> <span style ="color:#000000; font-weight: 700">Fig. 2 Wellbeing at Work and in Life</span> <br>
+```{r, image_grobs, fig.show="hold", out.width="50%", fig.align="default"}
+
+knitr::include_graphics("WB_1a.png", error = FALSE)
+knitr::include_graphics("WB_2a.png", error = FALSE)
+
+```
+
+<br> Similarly, most participants (40%, 9) responded that in their personal life, they were either 'in a really good place' or 'in an ok place, but there things I'd like to improve' respectively.  Relatively low numbers (13%) of respondents across JDAC experienced lower mood at work (13%, 3) or in their personal lives (17%, 4).
+
+```{r, echo=FALSE}
+
+
+
+```
+                                                                                              
+
+#### <span style="color:#3f366d">Workload and Work Fulfillment</span>
+
+The majority of respondents (52%, 12) felt that their workload was 'just right' (Fig. 3). However, a considerable proportion of respondents (30%, 7) found that their workload was 'a bit heavy' (Fig. 3).
+
+<br> <span style ="color:#000000; font-weight: 700">Fig. 3 Workload Feelings</span> <br>
+```{r, out.width = "500px"}
+
+knitr::include_graphics("WK_1a.png", error = FALSE)
+
+#<span style ="color:#000000; font-size: 120%; font-weight: 545">Fig. 3 Workload Feelings</span>
+
+
+```
+<br> On a scale of 1 to 5, where 1 indicated 'not at all' and 5 represented 'very well', a median score of 4 was reported for work fulfillment.  Most respondents (8) expressed they believed that they their job complemented their interests and skills (Fig. 4).
+
+<br> <span style ="color:#000000; font-weight: 700">Fig. 4 Work Fulfillment</span> <br>
+```{r, out.width = "500px"}
+
+knitr::include_graphics("WK_2a.png", error = FALSE)
+
+#<span style ="color:#000000; font-size: 120%; font-weight: 545">Fig. 4 Work Fulfillment</span>
+
+
+```
+
+
+
+#### <span style="color:#3f366d">Team Effectiveness</span>
+
+The majority of respondents (44%, 10) expressed things were going 'quite well' in their DD team and in JDAC as a whole (52%, 12) (Fig. 5).
+
+
+<br> <span style ="color:#000000; font-weight: 700">Fig. 5 Team Effectiveness</span> <br>
+```{r, image_grobs4, fig.show="hold", out.width="50%", fig.align="default"}
+
+knitr::include_graphics("S_1a.png", error = FALSE)
+knitr::include_graphics("S_2a.png", error = FALSE)
+
+
+#<span style ="color:#000000; font-size: 120%; font-weight: 545">Fig. 4 Work Fulfillment</span>
+
+
+```
+
+<br> 
+
+#### <span style="color:#3f366d">Development and Training</span>
+
+```{r, echo=FALSE}
+
+```
+
+The median response of participants reporting they had clearly defined goals was 3 of 5.
+```{r, echo=FALSE}
+
+```
+Although four respondents across JDAC were very confident of their goals and objectives, nine participants across Data Science, Data Ops, International Foresight, Thematic Analysis and SitCen were not (Fig. 6).  
+
+
+
+<br> <span style ="color:#000000; font-weight: 700">Fig. 6 Established Goals</span> <br>
+```{r, out.width = "500px"}
+
+knitr::include_graphics("TD_1a.png", error = FALSE)
+
+#<span style ="color:#000000; font-size: 120%; font-weight: 545">Fig. 5 Established Goals</span>
+
+
+```
+<br> A common theme highlighted by participants included the need for a clearer and unified sense of direction and priorities from the SLT as well as a sense of a common culture across teams to encourage more connection across JDAC.
+
+Similarly, although most participants across JDAC felt they had either 'some, but not enough' (44%, 10) or 'very little' (35%, 8) core training and development, some participants (4, 17%) expressed they had undertaken the 'right amount' of it (Fig. 7).  
+
+
+
+
+
+
+
+
+<br> <span style ="color:#000000; font-weight: 700">Fig. 7 Core and Wider Training and Development</span> <br>
+```{r, image_grobs2, fig.show="hold", out.width="50%", fig.align="default"}
+
+knitr::include_graphics("TD_2a.png", error = FALSE)
+knitr::include_graphics("TD_3a.png", error = FALSE)
+```
+<br> Furthermore, most respondents across JDAC also expressed feeling they had undertaken either 'very little' (44%, 10) or 'some, but not enough' (40%, 9) wider training and development (Fig. 7).  A common theme identified from respondent comments highlighted the importance of exploring training need gaps across JDAC to develop even more effective learning and development offers:
+
+*"L&D!! What do people want to learn? How do we encourage learning as a group?"*
+
+
+### <span style="color:#3f366d">Wildcard Questions</span>
+
+Of those who are not exempt from completing mid-year reviews, just 16% reported having completed one (Fig. 8).<br>
+
+<br> <span style ="color:#000000; font-weight: 700">Fig. 8 Mid-Year Review Completion</span> <br>
+```{r, out.width = "500px"}
+
+knitr::include_graphics("TD_6a.png", error = FALSE)
+
+#<span style ="color:#000000; font-size: 120%; font-weight: 545">Fig. 7 Mid-Year Review Preparedness</span>
+
+
+```
+<br> However, as the survey closed on the same day as the mid-year review deadline, it is possible some respondents may have completed their mid-year review shortly before or after the survey deadline despite disclosing non-completion in their earlier response.  For this reason, mid-year review completion rates may be subject to change.
+
+Additionally, although six participants did not respond, most of the respondents (71%, 12) who were asked if they knew who to contact for concerns/ questions about the mid-year review process, noted feeling supported.
+
+Furthermore, on a scale of 1 to 5, where 1 represented 'not at all prepared' and 5 represented 'very prepared', most participants across JDAC felt fairly prepared for their mid-year reviews - the median score of respondents for preparedness was 4 (Fig. 9).
+
+<br> <span style ="color:#000000; font-weight: 700">Fig. 9 Mid-Year Review Preparedness</span> <br>
+```{r, out.width = "500px"}
+
+knitr::include_graphics("TD_5a.png", error = FALSE)
+
+#<span style ="color:#000000; font-size: 120%; font-weight: 545">Fig. 7 Mid-Year Review Preparedness</span>
+
+
+```
+
+
+However, although 63% (10) of respondents expressed that they were having monthly developmental conversations with their line managers, 13% (2) noted such conversations occurred less regularly and 25% (4) disclosed they had yet to receive one (Fig. 10).
+
+<br> <span style ="color:#000000; font-weight: 700">Fig. 10 Training and Development Planning</span> <br>
+```{r, out.width = "500px"}
+
+knitr::include_graphics("TD_4a.png", error = FALSE)
+
+#<span style ="color:#000000; font-size: 120%; font-weight: 545">Fig. 9 Training and Development Planning</span>
+
+
+```
+
+Responses to this question also include those from staff who are exempt from completing a mid-year review.
+
+```{r, echo=FALSE}
+
+
+```
+
+
+```{r, echo=FALSE}
+
+```
+
+```{r, echo=FALSE}
+
+
+```
+
+```{r, echo=FALSE}
+
+
+```
+
+```{r, echo=FALSE}
+
+```
+
+```{r, echo=FALSE}
+
+```
+## <span style="color:#3f366d">Methodology</span>
+
+Each item in the survey was reviewed within the JDAC Pulse Survey Strand so the relevance and appropriateness could be discussed.  A pilot test  conducted during a Senior Management Team meeting asked volunteers to verbally evaluate items that were not understood.  No difficulties were encountered.  Minor changes were made to the questions in the final version following the pilot.
+
+The survey consisted of 20 questions and six sections (please refer to  Table 1).  
+
+```{r,echo=FALSE}
+library(readxl)
+JDAC_Pulse_Survey_v2_Responses_ <- read_excel("C:/Users/katrina.ihebunezie/Downloads/JDAC Pulse Survey v2 (Responses).xlsx")
+
+```
+
+```{r, echo=FALSE}
+library(readxl)
+
+library(readxl)
+datatype2 <- read_excel("C:/Users/katrina.ihebunezie/Desktop/datatype2.xlsx", 
+    range = "B1:K7")
+
+
+datatable(
+  head(datatype2),
+ caption = htmltools::tags$caption("Table 1: Data Type", style="color:black"),
+ rownames = FALSE)
+
+
+#datatable(head(datatype2),
+ #         caption = htmltools::tags$caption("Table 1: Data Type", style="color:black"),
+  #        rownames = FALSE)
+
+#knitr::include_graphics("Table 1_Data_Type.png", error = FALSE)
+#<span style="color:#000000; font-size: 120%; font-weight: 545">Table 1. An Overview of Data Type</span>
+```
+Participants who had not responded were contacted via email, team meetings and/ or the group chat and reminded to complete their survey weekly.  Data was analysed using RStudio 2022.07.1+554.
+
+```{r,echo=FALSE}
+
+library(readxl)
+library(AER)
+library(gtsummary)
+
+library(readxl)
+JDAC_Pulse_Survey_v2_Responses_ <- read_excel("C:/Users/katrina.ihebunezie/Downloads/JDAC Pulse Survey v2 (Responses).xlsx")
+
+
+my_theme <-
+  list(
+    "as_gt-lst:addl_cmds" = list(
+      tab_spanner = rlang::expr(gt::tab_options(table.font.size = 'small')),
+      user_added1 = rlang::expr(gt::tab_source_note(
+        source_note = "Source: Internal data")),
+      user_added2 = rlang::expr(gt::opt_row_striping()),
+      user_added3 = rlang::expr(gt::opt_table_lines("none"))
+      )
+    )
+  
+reset_gtsummary_theme()
+set_gtsummary_theme(my_theme)
+
+```
+
+## <span style="color:#3f366d">Supplementary Material</span>
+
+### <span style="color:#3f366d">Charts</span>
+
+```{r, out.width = "500px"}
+
+knitr::include_graphics("SM_1.png", error = FALSE)
+knitr::include_graphics("SM_2.png", error = FALSE)
+knitr::include_graphics("SM_3.png", error = FALSE)
+knitr::include_graphics("SM_4.png", error = FALSE)
+knitr::include_graphics("SM_5.png", error = FALSE)
+
+#<span style ="color:#000000; font-size: 120%; font-weight: 545">Fig. Supplementary Materials</span>
+
+
+```
+
+
+
+
+### <span style="color:#3f366d">Tables</span>
+```{r, echo=FALSE}
+library(dplyr)
+library(here)
+library(tidyverse)
+library(kableExtra)
+library(gtsummary)
+library(AER)
+library(readxl)
+
+library(readxl)
+JDAC_Pulse_Survey_v2_Responses_ <- read_excel("C:/Users/katrina.ihebunezie/Downloads/JDAC Pulse Survey v2 (Responses).xlsx")
+
+y_theme_tbl <-
+JDAC_Pulse_Survey_v2_Responses_ %>%
+  tbl_summary(
+    include = c(`My wellbeing at work is...`, `My wellbeing overall in my life is...`),
+    digits = list(
+      all_categorical() ~ c(0, 1),
+      all_continuous() ~ c(1,1)
+      ),
+   # type = `How much of what was covered was new to you?` ~ "continuous",
+    statistic = list(
+      `My wellbeing at work is...` ~ "{mean} ({sd})",
+   `My wellbeing overall in my life is...` ~ "{mean} ({sd})",
+      all_categorical() ~ "{n} ({p})"
+    ),
+    label = list(
+      `My wellbeing at work is...` ~ "Wellbeing at Work",
+      `My wellbeing overall in my life is...` ~ "Wellbeing in Life"
+    )
+  ) 
+
+#y_theme_tbl <- Newsletter_feedback_form_Responses_ #%>%
+ 
+ #m
+
+y_theme_tbl.align = "left"
+
+y_theme_tbl %>%
+  modify_caption("<div style='text-align: left; font-weight: bold; color:black'> Table 2. Wellbeing at Work and in Life</div>")%>%
+  as_gt () %>%
+  gt::tab_options(table.font.names = "Arial", table.width = 830, table.align = "left")
+
+y_theme_tbl %>%
+  modify_caption("<div style='text-align: left; font-weight: bold; color:black'> Table 2. Wellbeing at Work and in Life</div>")%>%
+  as_gt () %>%
+  gt::tab_options(table.font.names = "Arial", table.width = 830, table.align = "left") %>% gt::gtsave((filename = "jdac-1.html"))
+
+
+#my_theme <-
+ # list(
+  # "as_gt-lst:addl_cmds" = list(
+   #   tab_spanner = rlang::expr(gt::tab_options(table.font.size = 'small')),
+    #  user_added1 = rlang::expr(gt::tab_source_note(
+     #   source_note = "Internal data")),
+      #user_added1 = rlang::expr(gt::opt_row_striping()),
+      #user_added2 = rlang::expr(gt::opt_table_lines("none"))
+#      )
+ #   )
+  
+#reset_gtsummary_theme()
+#set_gtsummary_theme(my_theme)
+#my_theme_tbl <- Newsletter_feedback_form_Responses_ %>%
+ # tbl_summary(
+  # include = c( `How often do you read the JDAC newsletter?`, `How much of what was covered was new to you?`)
+   # )
+#my_theme_tbl %>%
+ # modify_caption("<div style='text-align: left; font-weight: bold; color:black'> Table 2. Interest</div>")
+```
+
+```{r,echo=FALSE}
+
+library(dplyr)
+library(here)
+library(tidyverse)
+library(kableExtra)
+library(gtsummary)
+library(AER)
+library(readxl)
+
+JDAC_Pulse_Survey_v2_Responses_ <- read_excel("C:/Users/katrina.ihebunezie/Downloads/JDAC Pulse Survey v2 (Responses).xlsx")
+
+z_theme_tbl <-
+JDAC_Pulse_Survey_v2_Responses_ %>%
+  tbl_summary(
+    include = c(`My workload is...`, `How well do you feel your day-to-day job matches your interests and skills?`),
+    digits = list(
+      all_categorical() ~ c(0, 1),
+      all_continuous() ~ c(1,1)
+      ),
+    type = `How well do you feel your day-to-day job matches your interests and skills?` ~ "continuous",
+    statistic = list(
+      `My workload is...` ~ "{mean} ({sd})",
+   `How well do you feel your day-to-day job matches your interests and skills?` ~ "{median} ({p25}, {p75})",
+      all_categorical() ~ "{n} ({p})"
+    ),
+    label = list(
+      `My workload is...` ~ "Workload Feelings",
+      `How well do you feel your day-to-day job matches your interests and skills?` ~ "Work Fulfillment"
+    )
+  )
+
+#my_theme_tbl <- Newsletter_feedback_form_Responses_ %>%
+ 
+ #m
+z_theme_tbl %>%
+  modify_caption("<div style='text-align: left; font-weight: bold; color:black'> Table 3. Workload and Work Fulfillment</div>")%>%
+  as_gt () %>%
+  gt::tab_options(table.font.names = "Arial", table.align = "left", table.width = 830)
+
+z_theme_tbl %>%
+  modify_caption("<div style='text-align: left; font-weight: bold; color:black'> Table 3. Workload and Work Fulfillment</div>")%>%
+  as_gt () %>%
+  gt::tab_options(table.font.names = "Arial", table.align = "left", table.width = 830) %>% gt::gtsave(filename = "jdac-2.html")
+
+```
+
+```{r, echo=FALSE}
+library(dplyr)
+library(here)
+library(tidyverse)
+library(kableExtra)
+library(gtsummary)
+library(AER)
+library(readxl)
+library(gt)
+
+JDAC_Pulse_Survey_v2_Responses_ <- read_excel("C:/Users/katrina.ihebunezie/Downloads/JDAC Pulse Survey v2 (Responses).xlsx")
+
+q_theme_tbl <- JDAC_Pulse_Survey_v2_Responses_  %>%
+  tbl_summary(
+    include = c(`How well is it going working in your DD team?`, `How well is it going working in JDAC?`),
+    digits = list(
+      all_categorical() ~ c(0, 1),
+      all_continuous() ~ c(1,1)
+      ),
+   # type = c(`How well is it going working in your DD team?`, `How well is it going working in JDAC?`) ~ "continuous",
+    statistic = list(
+   
+  `How well is it going working in your DD team?` ~  "{mean} ({sd})",
+        `How well is it going working in JDAC?` ~ "{mean} ({sd})",
+    
+ #   `I will have to re-read some sections` ~ "{median} ({p25}, {p75})",
+ #    `I felt like I took most of it in` ~ "{median} ({p25}, {p75})",
+ #   `I could have learned more` ~ "{median} ({p25}, {p75})",
+ #   `I needed a lot more information` ~ "{median} ({p25}, {p75})",
+      all_categorical() ~ "{n} ({p})"
+    ),
+    label = list(
+      `How well is it going working in your DD team?` ~ "Team Effectiveness: DD",
+      `How well is it going working in JDAC?` ~ "Team Effectiveness: JDAC"
+    )
+  )
+
+#my_theme_tbl <- Newsletter_feedback_form_Responses_ %>%
+fitflexibletabletopage <- function(ft, pgwidth = 6) {
+  ft_out <- ft %>% autofit()
+  ft_out <- width(ft_out, width = dim(ft_out)$widths*pgwidth / (flextable_dim(ft_out)$widths))
+  return(ft_out)
+} 
+ #m
+q_theme_tbl %>%
+  modify_caption("<div style='text-align: left; font-weight: bold; color:black'> Table 4. Team Effectiveness</div>")%>%
+  as_gt () %>%
+  gt::tab_options(table.font.names = "Arial", table.align = "left", table.width = 830)
+
+q_theme_tbl %>%
+  modify_caption("<div style='text-align: left; font-weight: bold; color:black'> Table 4. Team Effectiveness</div>")%>%
+  as_gt () %>%
+  gt::tab_options(table.font.names = "Arial", table.align = "left", table.width = 830) %>% gt::gtsave(filename = "jdac-3.html")
+
+```
+
+```{r,echo=FALSE}
+library(dplyr)
+library(here)
+library(tidyverse)
+library(kableExtra)
+library(gtsummary)
+library(AER)
+library(readxl)
+library(gt)
+
+JDAC_Pulse_Survey_v2_Responses_ <- read_excel("C:/Users/katrina.ihebunezie/Downloads/JDAC Pulse Survey v2 (Responses).xlsx")
+
+hhh_theme_tbl <- JDAC_Pulse_Survey_v2_Responses_  %>%
+  tbl_summary(
+    include = c(`How clear are your goals?`, `How much core training and development are you doing?`, `How much wider development training and development are you doing?`, `Are you having development conversations with your line manager even though you are exempt from the mid-year review?`),
+    digits = list(
+      all_categorical() ~ c(0, 1),
+      all_continuous() ~ c(1,1)
+      ),
+    type = c(`How clear are your goals?`) ~ "continuous",
+    statistic = list(
+   
+  `How clear are your goals?` ~ "{median} ({p25}, {p75})",
+        `How much core training and development are you doing?` ~ "{mean} ({sd})",
+      `How much wider development training and development are you doing?` ~ "{mean} ({sd})",
+     `Are you having development conversations with your line manager even though you are exempt from the mid-year review?` ~ "{mean} ({sd})",
+ #   `I will have to re-read some sections` ~ "{median} ({p25}, {p75})",
+ #    `I felt like I took most of it in` ~ "{median} ({p25}, {p75})",
+ #   `I could have learned more` ~ "{median} ({p25}, {p75})",
+ #   `I needed a lot more information` ~ "{median} ({p25}, {p75})",
+      all_categorical() ~ "{n} ({p})"
+    ),
+    label = list(
+      `How clear are your goals?` ~ "Established Goals",
+      `How much core training and development are you doing?` ~ "Core Training and Development",
+       `How much wider development training and development are you doing?` ~ "Wider Training and Development",
+      `Are you having development conversations with your line manager even though you are exempt from the mid-year review?` ~ "Training and Development Planning"
+    )
+  )
+
+#my_theme_tbl <- Newsletter_feedback_form_Responses_ %>%
+fitflexibletabletopage <- function(ft, pgwidth = 6) {
+  ft_out <- ft %>% autofit()
+  ft_out <- width(ft_out, width = dim(ft_out)$widths*pgwidth / (flextable_dim(ft_out)$widths))
+  return(ft_out)
+} 
+ #m
+hhh_theme_tbl %>%
+  modify_caption("<div style='text-align: left; font-weight: bold; color:black'> Table 5. Development and Training</div>")%>%
+  as_gt () %>%
+  gt::tab_options(table.font.names = "Arial", table.align = "left", table.width = 830)
+
+hhh_theme_tbl %>%
+  modify_caption("<div style='text-align: left; font-weight: bold; color:black'> Table 5. Development and Training</div>")%>%
+  as_gt () %>%
+  gt::tab_options(table.font.names = "Arial", table.align = "left", table.width = 830) %>% gt::gtsave(filename = "jdac-3.html")
+```
+
+```{r, out.width = "300px"}
+library(dplyr)
+library(here)
+library(tidyverse)
+library(kableExtra)
+library(gtsummary)
+library(AER)
+library(readxl)
+library(gt)
+
+JDAC_Pulse_Survey_v2_Responses_ <- read_excel("C:/Users/katrina.ihebunezie/Downloads/JDAC Pulse Survey v2 (Responses).xlsx")
+
+zzz_theme_tbl <- JDAC_Pulse_Survey_v2_Responses_  %>%
+  tbl_summary(
+    include = c(`Do you need to do a mid-year review?`, `Do you know who to contact for support if you have any concerns/questions about the mid-year review?`, `How prepared do you feel for your mid-year review?`),
+    digits = list(
+      all_categorical() ~ c(0, 1),
+      all_continuous() ~ c(1,1)
+      ),
+    type = c(`How prepared do you feel for your mid-year review?`) ~ "continuous",
+    statistic = list(
+           `Do you need to do a mid-year review?` ~ "{mean} ({sd})",
+      `Do you know who to contact for support if you have any concerns/questions about the mid-year review?` ~ "{mean} ({sd})",
+       `How prepared do you feel for your mid-year review?` ~ "{median} ({p25}, {p75})",
+    
+ #   `I will have to re-read some sections` ~ "{median} ({p25}, {p75})",
+ #    `I felt like I took most of it in` ~ "{median} ({p25}, {p75})",
+ #   `I could have learned more` ~ "{median} ({p25}, {p75})",
+ #   `I needed a lot more information` ~ "{median} ({p25}, {p75})",
+      all_categorical() ~ "{n} ({p})"
+    ),
+    label = list(
+            `Do you need to do a mid-year review?` ~ "Eligibility",
+       `Do you know who to contact for support if you have any concerns/questions about the mid-year review?` ~ "Supportedness",
+      `How prepared do you feel for your mid-year review?` ~ "Preparedness"
+    )
+  )
+
+#my_theme_tbl <- Newsletter_feedback_form_Responses_ %>%
+fitflexibletabletopage <- function(ft, pgwidth = 6) {
+  ft_out <- ft %>% autofit()
+  ft_out <- width(ft_out, width = dim(ft_out)$widths*pgwidth / (flextable_dim(ft_out)$widths))
+  return(ft_out)
+} 
+ #m
+zzz_theme_tbl %>%
+  modify_caption("<div style='text-align: left; font-weight: bold; color:black'> Table 6. Mid-Year Reviews</div>")%>%
+  as_gt () %>%
+  gt::tab_options(table.font.names = "Arial", table.align = "left", table.width = 830)
+
+zzz_theme_tbl %>%
+  modify_caption("<div style='text-align: left; font-weight: bold; color:black'> Table 6. Mid-Year Reviews</div>")%>%
+  as_gt () %>%
+  gt::tab_options(table.font.names = "Arial", table.align = "left", table.width = 830) %>% gt::gtsave(filename = "jdac-5.html")
+```
