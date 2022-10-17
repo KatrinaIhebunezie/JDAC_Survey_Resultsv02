@@ -119,9 +119,6 @@ g <- f %>% mutate_at(
 )
 
 g[is.na(g)] = 1
-
-#Body <font face="Copperplate Gothic Light" size = 20></font>
-#Header font-family: Copperplate Gothic Light
 ```
 
 ```{r, echo=FALSE}
@@ -232,6 +229,10 @@ set_gtsummary_theme(my_theme)
 Of the 80 people approached, 23 participated (response rate = 30%) (Fig. 1).  
 
 <br> <span style ="color:#000000; font-weight: 700">Fig. 1. Participant Demographics (by Team and Grade)</span> <br>
+
+![](https://i.imgur.com/AkZbH2u.png)
+![](https://i.imgur.com/eDljHIJ.png)
+
 ```{r, image_grobs3, fig.show="hold", out.width="50%", fig.align="default"}
 
 knitr::include_graphics("Demo_1.png", error = FALSE)
@@ -244,6 +245,9 @@ knitr::include_graphics("Demo_2.png", error = FALSE)
 The majority of respondents (87%) expressed they were either 'in a really good place' (44%, 10) or 'in an ok place, but there are things I'd like to improve' whilst at work respectively (44%, 10) (Fig. 2).
 
 <br> <span style ="color:#000000; font-weight: 700">Fig. 2 Wellbeing at Work and in Life</span> <br>
+![](https://i.imgur.com/KsWRfAm.png) ![](https://i.imgur.com/oaFptl5.png)
+
+
 ```{r, image_grobs, fig.show="hold", out.width="50%", fig.align="default"}
 
 knitr::include_graphics("WB_1a.png", error = FALSE)
@@ -265,6 +269,8 @@ knitr::include_graphics("WB_2a.png", error = FALSE)
 The majority of respondents (52%, 12) felt that their workload was 'just right' (Fig. 3). However, a considerable proportion of respondents (30%, 7) found that their workload was 'a bit heavy' (Fig. 3).
 
 <br> <span style ="color:#000000; font-weight: 700">Fig. 3 Workload Feelings</span> <br>
+![](https://i.imgur.com/rzfNfVp.png)
+
 ```{r, out.width = "500px"}
 
 knitr::include_graphics("WK_1a.png", error = FALSE)
@@ -276,6 +282,8 @@ knitr::include_graphics("WK_1a.png", error = FALSE)
 <br> On a scale of 1 to 5, where 1 indicated 'not at all' and 5 represented 'very well', a median score of 4 was reported for work fulfillment.  Most respondents (8) expressed they believed that they their job complemented their interests and skills (Fig. 4).
 
 <br> <span style ="color:#000000; font-weight: 700">Fig. 4 Work Fulfillment</span> <br>
+![](https://i.imgur.com/Je2G7vy.png)
+
 ```{r, out.width = "500px"}
 
 knitr::include_graphics("WK_2a.png", error = FALSE)
@@ -293,6 +301,9 @@ The majority of respondents (44%, 10) expressed things were going 'quite well' i
 
 
 <br> <span style ="color:#000000; font-weight: 700">Fig. 5 Team Effectiveness</span> <br>
+![](https://i.imgur.com/zPVoxkg.png)![](https://i.imgur.com/a64Pwj5.png)
+
+
 ```{r, image_grobs4, fig.show="hold", out.width="50%", fig.align="default"}
 
 knitr::include_graphics("S_1a.png", error = FALSE)
@@ -308,19 +319,16 @@ knitr::include_graphics("S_2a.png", error = FALSE)
 
 #### <span style="color:#3f366d">Development and Training</span>
 
-```{r, echo=FALSE}
-
-```
 
 The median response of participants reporting they had clearly defined goals was 3 of 5.
-```{r, echo=FALSE}
 
-```
 Although four respondents across JDAC were very confident of their goals and objectives, nine participants across Data Science, Data Ops, International Foresight, Thematic Analysis and SitCen were not (Fig. 6).  
 
 
 
 <br> <span style ="color:#000000; font-weight: 700">Fig. 6 Established Goals</span> <br>
+![](https://i.imgur.com/cmMR39D.png)
+
 ```{r, out.width = "500px"}
 
 knitr::include_graphics("TD_1a.png", error = FALSE)
@@ -341,6 +349,9 @@ Similarly, although most participants across JDAC felt they had either 'some, bu
 
 
 <br> <span style ="color:#000000; font-weight: 700">Fig. 7 Core and Wider Training and Development</span> <br>
+![](https://i.imgur.com/ZCLgDp6.png) ![](https://i.imgur.com/kGd2t7S.png)
+
+
 ```{r, image_grobs2, fig.show="hold", out.width="50%", fig.align="default"}
 
 knitr::include_graphics("TD_2a.png", error = FALSE)
@@ -356,6 +367,8 @@ knitr::include_graphics("TD_3a.png", error = FALSE)
 Of those who are not exempt from completing mid-year reviews, just 16% reported having completed one (Fig. 8).<br>
 
 <br> <span style ="color:#000000; font-weight: 700">Fig. 8 Mid-Year Review Completion</span> <br>
+![](https://i.imgur.com/GMfRJJv.png)
+
 ```{r, out.width = "500px"}
 
 knitr::include_graphics("TD_6a.png", error = FALSE)
@@ -371,6 +384,8 @@ Additionally, although six participants did not respond, most of the respondents
 Furthermore, on a scale of 1 to 5, where 1 represented 'not at all prepared' and 5 represented 'very prepared', most participants across JDAC felt fairly prepared for their mid-year reviews - the median score of respondents for preparedness was 4 (Fig. 9).
 
 <br> <span style ="color:#000000; font-weight: 700">Fig. 9 Mid-Year Review Preparedness</span> <br>
+![](https://i.imgur.com/WSTfScq.png)
+
 ```{r, out.width = "500px"}
 
 knitr::include_graphics("TD_5a.png", error = FALSE)
@@ -384,6 +399,8 @@ knitr::include_graphics("TD_5a.png", error = FALSE)
 However, although 63% (10) of respondents expressed that they were having monthly developmental conversations with their line managers, 13% (2) noted such conversations occurred less regularly and 25% (4) disclosed they had yet to receive one (Fig. 10).
 
 <br> <span style ="color:#000000; font-weight: 700">Fig. 10 Training and Development Planning</span> <br>
+![](https://i.imgur.com/B8qPWa6.png)
+
 ```{r, out.width = "500px"}
 
 knitr::include_graphics("TD_4a.png", error = FALSE)
@@ -395,33 +412,15 @@ knitr::include_graphics("TD_4a.png", error = FALSE)
 
 Responses to this question also include those from staff who are exempt from completing a mid-year review.
 
-```{r, echo=FALSE}
 
 
-```
 
 
-```{r, echo=FALSE}
-
-```
-
-```{r, echo=FALSE}
 
 
-```
-
-```{r, echo=FALSE}
 
 
-```
 
-```{r, echo=FALSE}
-
-```
-
-```{r, echo=FALSE}
-
-```
 ## <span style="color:#3f366d">Methodology</span>
 
 Each item in the survey was reviewed within the JDAC Pulse Survey Strand so the relevance and appropriateness could be discussed.  A pilot test  conducted during a Senior Management Team meeting asked volunteers to verbally evaluate items that were not understood.  No difficulties were encountered.  Minor changes were made to the questions in the final version following the pilot.
