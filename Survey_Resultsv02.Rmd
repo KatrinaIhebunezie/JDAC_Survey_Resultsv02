@@ -1,0 +1,700 @@
+---
+title: "<div style="margin:20px">Survey Results</div>"
+author: "Comms Corporate Strand"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    number_sections: no
+    theme: cerulean
+    highlight: kate
+    toc: yes
+    toc_float: yes
+    collapsed: yes
+    smooth_scroll: yes
+    rmdformats::readthedown: null
+    self_contained: yes
+    thumbnails: yes
+    lightbox: yes
+    gallery: yes
+    keep_md: yes
+    figure_keep: yes
+  word_document:
+    toc: yes
+---
+<style>
+
+.list-group-item.active, .list-group-item.active:focus, 
+.list-group-item.active:hover {
+  background-color: #3f366d;
+  
+}
+
+.title {
+  text-align: center;
+  color: #3f366d;
+}
+
+.author {
+  text-align: right;
+  color: #3f366d;
+}
+
+.date {
+  text-align: right;
+  color: #3f366d;
+}
+
+.number_sections {
+  color: #3f366d;
+}
+
+</style>
+
+<script type="text/javascript">
+$(function)() {
+$('.navbar-left').before($('.logo'));
+
+})
+</script>
+
+<div class="logo pull-left">
+<img src="logo.png" alt="logo" width="160"
+style="margin-top: -280px;">
+</div>
+
+<style type="text/css">
+caption, .table-caption {
+text-align:left; font-weight: bold;
+}
+</style>
+
+```{r setup, include=FALSE}
+#install.packages("readxl")
+library(readxl)
+library(tidyverse)
+#install.packages("dplyr")
+#install.packages("likert")
+library(dplyr)
+library(broom)
+library(plotly)
+library(scales)
+library(likert)
+library(knitr)
+library(kableExtra)
+library(gtsummary)
+library(AER)
+library(DT)
+library(here)
+library(tinytex)
+
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  collapse = TRUE,
+  comment = ""
+)
+
+setwd("/Users/katrina.ihebunezie/Downloads")
+
+data <- read_excel("Newsletter feedback form (Responses).xlsx")
+
+f <- data%>%
+  select(c(4:9)) %>%
+  mutate_if(is.character, as.factor)
+
+g <- f %>% mutate_at(
+  vars(starts_with("What do you think about the amount of information delivered in the newsletter?")),
+  funs(case_when(
+    .=="Strongly Disagree"~1,
+    .=="Disagree"~2,
+    .=="Neither Agree or Disagree"~3,
+    .=="Agree"~4,
+    .=="Strongly Agree"~5,
+  ))
+  
+  
+  
+  
+)
+
+g[is.na(g)] = 1
+
+```
+
+```{r, include = FALSE}
+
+data$`How often do you read the JDAC newsletter?` <- as.factor(data$`How often do you read the JDAC newsletter?`)
+
+data$`What do you think about the amount of information delivered in the newsletter? [Way too much (I will forget a lot of it and may need to read the entire newsletter again)]` <- as.factor(data$`What do you think about the amount of information delivered in the newsletter? [Way too much (I will forget a lot of it and may need to read the entire newsletter again)]`)
+
+data$`What do you think about the amount of information delivered in the newsletter? [A little too much (I will have to re-read some sections)]` <- as.factor(data$`What do you think about the amount of information delivered in the newsletter? [A little too much (I will have to re-read some sections)]`)
+
+data$`What do you think about the amount of information delivered in the newsletter? [Just right (I felt like I took most of it in)]` <- as.factor(data$`What do you think about the amount of information delivered in the newsletter? [Just right (I felt like I took most of it in)]`)
+
+data$`What do you think about the amount of information delivered in the newsletter? [Not quite enough (I could have learned more)]` <- as.factor(data$`What do you think about the amount of information delivered in the newsletter? [Not quite enough (I could have learned more)]`)
+
+data$`What do you think about the amount of information delivered in the newsletter? [Nowhere near enough (I needed a lot more information)]` <- as.factor(data$`What do you think about the amount of information delivered in the newsletter? [Nowhere near enough (I needed a lot more information)]`)
+
+data$`Please tell us which team you work with` <- as.factor(data$`Please tell us which team you work with`)
+
+data$`Did this newsletter feel relevant to your role?` <- as.factor(data$`Did this newsletter feel relevant to your role?`)
+
+data$`Which part did you find most useful/ relevant?` <- as.factor(data$`Which part did you find most useful/ relevant?`)
+
+data$`Which part did you find least useful/ relevant?` <- as.factor(data$`Which part did you find least useful/ relevant?`)
+
+#data$`How satisfied were you overall with the content?` <- as.factor(data$`How satisfied were you overall with the content?`)
+
+data$`Please feel free to leave any comments that you feel will help us to improve our newsletter.` <- as.factor(data$`Please feel free to leave any comments that you feel will help us to improve our newsletter.`)
+```
+### <span style="color:#ffffff">Contents</span>
+
+```{r, echo=FALSE}
+```
+
+## <span style="color:#3f366d">Background</span>
+
+The exchange of regular and reliable data between teams is vital in ensuring the accessibility, availability and effectiveness of services.  Addressing population needs is dependent on robust intelligence from a range of data sources to ensure that service planners and providers meet those needs in a cost-effective manner that guides public policy and practice.  The pronounced awareness and interest in health and economic outcomes across government following the COVID-19 outbreak has increased the demand for a collaborative analytical network with the capacity to transform raw data into intelligence and actionable insight through efficient information sharing.  There is also a need to keep pace with the rapid developments within JDAC and harness the potential of data visualisation, knowledge translation as well as machine learning approaches. 
+
+This survey was an opportunity to gather a broad overview of the interests and needs of analysts across JDAC and SitCen in order to prioritise the provision of fresher and more engaging content.  This survey was developed by the Communications Corporate Strand.
+
+
+
+## <span style="color:#3f366d">Methodology</span>
+
+Each item in the survey was reviewed within the Communications Corporate Strand so the relevance and appropriateness could be discussed.  A pilot test was conducted on a Data Operations lead who was asked to verbally evaluate items that were not understood.  No difficulties were encountered.  Hence, no changes were made to the questions in the final version following the pilot.
+
+The survey consisted of ten questions and four sections (please refer to the Table 1).  
+
+```{r,echo=FALSE}
+library(readxl)
+Newsletter_feedback_form_Responses_ <- read_excel("C:/Users/katrina.ihebunezie/Downloads/Newsletter feedback form (Responses).xlsx")
+```
+
+```{r, echo=FALSE}
+library(readxl)
+
+datatype <- read_excel("C:/Users/katrina.ihebunezie/Desktop/datatype.xlsx", 
+    range = "B1:H5")
+
+datatable(
+  head(datatype),
+ caption = htmltools::tags$caption("Table 1: Data Type", style="color:black"),
+ rownames = FALSE)
+
+
+#datatable(head(datatype),
+ #         caption = htmltools::tags$caption("Table 1: Data Type", style="color:black"),
+  #        rownames = FALSE)
+
+#knitr::include_graphics("Table 1_Data_Type.png", error = FALSE)
+#<span style="color:#000000; font-size: 120%; font-weight: 545">Table 1. An Overview of Data Type</span>
+```
+One item in the 'Which parts did you enjoy or learn most from?' domain was measured on the Likert-scale and could be validated.  A higher score indicated higher satisfaction with the JDAC newsletter.  
+
+Statistical analysis of linear, dichotomous, semantic differential and frequency scale data considered variables on a continuous scale as empirical studies highlight that ordinal variables with five or more categories may be referred to as an 'ordinal approximation of a continuous variable' without any harm to statistical analysis (Sullivan & Artino 2013; Norman 2010; Zumbo & Zimmerman 1993; Johnson & Creech 1983).
+
+Participants who had not responded were contacted via email, team meetings and/ or the group chat and reminded to complete their survey weekly.  Data was analysed using RStudio 2022.07.1+554.
+
+## <span style="color:#3f366d">Results and Discussion</span>
+
+Of the 80 people approached, 24 participated (response rate = 30%).
+
+
+
+```{r, echo=FALSE}
+
+library(readxl)
+library(AER)
+library(gtsummary)
+
+Newsletter_feedback_form_Responses_ <- read_excel("C:/Users/katrina.ihebunezie/Downloads/Newsletter feedback form (Responses).xlsx", 
+    range = "A1:P25")
+
+my_theme <-
+  list(
+    "as_gt-lst:addl_cmds" = list(
+      tab_spanner = rlang::expr(gt::tab_options(table.font.size = 'small')),
+      user_added1 = rlang::expr(gt::tab_source_note(
+        source_note = "Source: Internal data")),
+      user_added2 = rlang::expr(gt::opt_row_striping()),
+      user_added3 = rlang::expr(gt::opt_table_lines("none"))
+      )
+    )
+  
+reset_gtsummary_theme()
+set_gtsummary_theme(my_theme)
+
+```
+### <span style="color:#3f366d">Main Findings</span>
+- Most teams expressed interest in the JDAC newsletter, particularly Strategy Ops and Engagement, SitCen and Thematic Analysis teams
+- There may be a need to redesign some of the newsletter’s content to prioritise newer, fresher and more useful content for JDAC that is specifically more attentive of the interests of the International and Foresight, SitCen and Data Science teams
+- Most teams across JDAC found the newsletter included the ‘right’ quantity of information.  Specific areas of potential appeal that were identified include:
+  - Greater focus on more personable features that concentrate on re-introducing/ introducing members of the team
+  - More regular updates for each DD led team and a reduction in the number of signposting links to streamline content
+- While most respondents found the SMT updates and JDAC priorities/ links most relevant to their job role and appreciated the inclusion of the ‘introductions to new starters’ feature, some expressed less interest in updates from the G6
+
+### <span style="color:#3f366d">Interest and Instructiveness</span>
+
+The majority of respondents (66.7%) across teams read the JDAC newsletter regularly (every week) (Table 2). 
+```{r, echo=FALSE}
+library(dplyr)
+library(here)
+library(tidyverse)
+library(kableExtra)
+library(gtsummary)
+library(AER)
+library(readxl)
+
+Newsletter_feedback_form_Responses_ <- read_excel("C:/Users/katrina.ihebunezie/Downloads/Newsletter feedback form (Responses).xlsx")
+
+y_theme_tbl <-
+Newsletter_feedback_form_Responses_ %>%
+  tbl_summary(
+    include = c(`How often do you read the JDAC newsletter?`, `How much of what was covered was new to you?`),
+    digits = list(
+      all_categorical() ~ c(0, 1),
+      all_continuous() ~ c(1,1)
+      ),
+    type = `How much of what was covered was new to you?` ~ "continuous",
+    statistic = list(
+      `How often do you read the JDAC newsletter?` ~ "{mean} ({sd})",
+    `How much of what was covered was new to you?` ~ "{median} ({p25}, {p75})",
+      all_categorical() ~ "{n} ({p})"
+    ),
+    label = list(
+      `How often do you read the JDAC newsletter?` ~ "Readership",
+      `How much of what was covered was new to you?` ~ "Instructive"
+    )
+  ) 
+
+#y_theme_tbl <- Newsletter_feedback_form_Responses_ #%>%
+ 
+ #m
+
+y_theme_tbl.align = "left"
+
+y_theme_tbl %>%
+  modify_caption("<div style='text-align: left; font-weight: bold; color:black'> Table 2. Interest</div>")%>%
+  as_gt () %>%
+  gt::tab_options(table.font.names = "Arial", table.width = 830)
+
+
+
+#my_theme <-
+ # list(
+  # "as_gt-lst:addl_cmds" = list(
+   #   tab_spanner = rlang::expr(gt::tab_options(table.font.size = 'small')),
+    #  user_added1 = rlang::expr(gt::tab_source_note(
+     #   source_note = "Internal data")),
+      #user_added1 = rlang::expr(gt::opt_row_striping()),
+      #user_added2 = rlang::expr(gt::opt_table_lines("none"))
+#      )
+ #   )
+  
+#reset_gtsummary_theme()
+#set_gtsummary_theme(my_theme)
+#my_theme_tbl <- Newsletter_feedback_form_Responses_ %>%
+ # tbl_summary(
+  # include = c( `How often do you read the JDAC newsletter?`, `How much of what was covered was new to you?`)
+   # )
+#my_theme_tbl %>%
+ # modify_caption("<div style='text-align: left; font-weight: bold; color:black'> Table 2. Interest</div>")
+```
+
+The highest readership numbers were reported among International and Foresight (5), Thematic Analysis (4) as well as Strategy Ops and Engagement (3) teams.  Relatively low numbers (12.5%) of respondents across JDAC read the newsletter less frequently (Fig. 1).
+
+```{r, echo=FALSE}
+
+d <- data%>%
+    filter(`Please tell us which team you work with` %in% c("Data Science", "Data Ops", "International and Foresight", "Thematic Analysis", "Strategy Ops and Engagement", "SitCen", "Other")) %>%
+  drop_na(`How often do you read the JDAC newsletter?`) %>%
+  ggplot(aes(x = `Please tell us which team you work with`))+
+  geom_bar(aes(fill = `How often do you read the JDAC newsletter?`), alpha = 1.0) +
+                    facet_wrap(~`How often do you read the JDAC newsletter?`)+
+     scale_fill_manual(values = c("#3f366d", "#395d9c", "#3497a9", "#60ceac", "#b2182b")) + 
+
+theme_bw() +
+  theme(legend.position = "none")+
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+
+  labs(title = "Fig. 1 JDAC Newsletter Readership: Reading Regularity",
+       x = "Team",
+       y = "No. of Participants",
+       caption = "Respondents were asked 'How often do you read the JDAC newsletter?'. Responses ranged from '1 = Never' to '5 = Regularly'")+
+  theme(plot.caption = element_text(hjust = 0))+
+  theme(plot.title = element_text(size=10, family="arial"))+
+theme(plot.caption = element_text(size=8, family="arial"))+
+  theme(axis.text = element_text(size = 7, family="arial"))+
+  theme(axis.title = element_text(size = 9, family="arial"))
+  
+  
+d
+```
+
+The majority of respondents across teams felt the content covered was quite new to them.  The median for instructiveness was 3.0 (2.0, 4.0) (Table 2).  Data Science and SitCen scored the highest and Strategy Ops and Engagement scoring lowest on average (Fig. 2).   
+
+```{r, echo=FALSE}
+
+b <- data %>% group_by (`Please tell us which team you work with`) %>% summarise(`Instructiveness by Teams` = mean(`How much of what was covered was new to you?`)) %>% ggplot(aes(x = `Please tell us which team you work with`, y = `Instructiveness by Teams`, fill = `Please tell us which team you work with`)) + 
+    geom_bar(stat = "identity") +
+      scale_fill_manual(values = c("#3f366d", "#395d9c", "#3497a9", "#60ceac", "#dead53", "#b2182b")) + 
+
+theme_bw() +
+  theme(legend.position = "none")+
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+
+  labs(title = "Fig. 2 JDAC Newsletter Content: The Need for Fresher Features",
+       x = "Team",
+       y = "Mean Instructiveness Scores",
+       caption = "Question: 'How much of what was covered was new to you?'. Scores ranged from '1 = None' to '5 = All of it'") +
+  theme(plot.caption = element_text(hjust = 0))+
+  theme(plot.title = element_text(size=10, family="arial"))+
+theme(plot.caption = element_text(size=8, family="arial"))+
+  theme(axis.text = element_text(size = 7, family="arial"))+
+  theme(axis.title = element_text(size = 9, family="arial"))
+
+b
+
+
+
+```
+                                                                                                         
+This indicates the newsletter may benefit from redesign so that newer, fresher and more useful content may be prioritised for our audience, in particular Strategy Ops and Engagement.
+
+
+
+### <span style="color:#3f366d">Relevance</span>
+
+The majority of respondents (83.3%) answered that the JDAC newsletter felt relevant to their job role (Table 3).
+
+
+```{r,echo=FALSE}
+
+library(dplyr)
+library(here)
+library(tidyverse)
+library(kableExtra)
+library(gtsummary)
+library(AER)
+library(readxl)
+
+Newsletter_feedback_form_Responses_ <- read_excel("C:/Users/katrina.ihebunezie/Downloads/Newsletter feedback form (Responses).xlsx")
+
+z_theme_tbl <-
+Newsletter_feedback_form_Responses_ %>%
+  tbl_summary(
+    include = c(`Did this newsletter feel relevant to your role?`),
+    digits = list(
+      all_categorical() ~ c(0, 1),
+      all_continuous() ~ c(1,1)
+      ),
+   # type = `How much of what was covered was new to you?` ~ "continuous",
+    statistic = list(
+      `Did this newsletter feel relevant to your role?` ~ "{mean} ({sd})",
+   
+      all_categorical() ~ "{n} ({p})"
+    ),
+    label = list(
+      `Did this newsletter feel relevant to your role?` ~ "Relevance"
+    )
+  )
+
+#my_theme_tbl <- Newsletter_feedback_form_Responses_ %>%
+ 
+ #m
+z_theme_tbl %>%
+  modify_caption("<div style='text-align: left; font-weight: bold; color:black'> Table 3. Relevance</div>")%>%
+  as_gt () %>%
+  gt::tab_options(table.font.names = "Arial", table.align = "left", table.width = 830)
+
+```
+
+International and Foresight as well as Thematic Analysis found the newsletter most relevant to their roles (Fig. 3).
+
+```{r, echo=FALSE}
+
+e <- data%>%
+    filter(`Please tell us which team you work with` %in% c("Data Science", "Data Ops", "International and Foresight", "Thematic Analysis", "Strategy Ops and Engagement", "SitCen", "Other")) %>%
+  drop_na(`Did this newsletter feel relevant to your role?`) %>%
+  ggplot(aes(x = `Please tell us which team you work with`))+
+  geom_bar(aes(fill = `Did this newsletter feel relevant to your role?`), alpha = 1.0) +
+                    facet_wrap(~`Did this newsletter feel relevant to your role?`)+
+     scale_fill_manual(values = c("#3f366d", "#395d9c", "#3497a9", "#60ceac", "#b2182b")) + 
+
+theme_bw() +
+  theme(legend.position = "none")+
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+
+  labs(title = "Fig. 3 Newsletter Relevance to Job Role",
+       x = "Team",
+       y = "No. of People",
+       caption = "Respondents answered either '1 = Yes' to '2 = No' to 'Did this newsletter feel relevant to your role?'")+
+  theme(plot.caption = element_text(hjust = 0))+
+  theme(plot.title = element_text(size=10, family="arial"))+
+theme(plot.caption = element_text(size=8, family="arial"))+
+  theme(axis.text = element_text(size = 7, family="arial"))+
+  theme(axis.title = element_text(size = 9, family="arial"))
+
+e
+
+```
+<br> Teams such as SitCen and Data Ops that found the newsletter less relevant to their role, may benefit from more targeted content and engagement.
+
+Additionally, of the 15 respondents that answered the question, 'Which part did you find most useful/ relevant', the majority found the SMT updates (8) and JDAC priorities/ links (5).  Some respondents also appreciated the inclusion of the 'introductions to new starters' feature (2).  Additionally, 3 participants also found updates from the G6 to be most useful or relevant to them.  However, it must be noted that although only 10 participants responded to the question, 'Which part did you find least useful/ relevant', the majority found the updates from the G6 section (3) to be least useful/ relevant. 
+
+### <span style="color:#3f366d">Content Quantity</span>
+
+```{r, echo=FALSE}
+
+```
+
+Respondents were asked 'What do you think about the amount of information delivered in the newsletter?' and provided with five options:
+
+- 'Way too much (I will forget a lot of it and may need to read the entire newsletter again)'
+- 'A little too much (I will have to re-read some sections)'
+- 'Just right (I felt like I took most of it in)'
+- 'Not quite enough (I could have learned more)'
+- 'Nowhere near enough (I needed a lot more information)'
+
+Scores ranged from '1 = Strongly Disagree' to '5 = Strongly Agree' (Table 4).
+
+```{r, echo=FALSE}
+
+h = g %>%
+  dplyr::summarise(`I will forget a lot of it and may need to read the entire newsletter again` = mean(`What do you think about the amount of information delivered in the newsletter? [Way too much (I will forget a lot of it and may need to read the entire newsletter again)]`),
+            `I will have to re-read some sections` = mean(`What do you think about the amount of information delivered in the newsletter? [A little too much (I will have to re-read some sections)]`),
+            `I felt like I took most of it in` = mean(`What do you think about the amount of information delivered in the newsletter? [Just right (I felt like I took most of it in)]`),
+            `I could have learned more` = mean(`What do you think about the amount of information delivered in the newsletter? [Not quite enough (I could have learned more)]`),
+            `I needed a lot more information` = mean(`What do you think about the amount of information delivered in the newsletter? [Nowhere near enough (I needed a lot more information)]`))
+
+i <- h %>% pivot_longer(`I will forget a lot of it and may need to read the entire newsletter again`: `I needed a lot more information`,
+                        names_to = "v", values_to ="value" )
+
+```
+
+```{r,echo=FALSE}
+library(dplyr)
+library(here)
+library(tidyverse)
+library(kableExtra)
+library(gtsummary)
+library(AER)
+library(readxl)
+library(gt)
+
+Newsletter_feedback_form_Responses_ <- read_excel("C:/Users/katrina.ihebunezie/Downloads/Newsletter feedback form (Responses).xlsx")
+
+k_theme_tbl <- Newsletter_feedback_form_Responses_  %>%
+  tbl_summary(
+    include = c(`What do you think about the amount of information delivered in the newsletter? [Way too much (I will forget a lot of it and may need to read the entire newsletter again)]`, `What do you think about the amount of information delivered in the newsletter? [A little too much (I will have to re-read some sections)]`, `What do you think about the amount of information delivered in the newsletter? [Just right (I felt like I took most of it in)]`, `What do you think about the amount of information delivered in the newsletter? [Not quite enough (I could have learned more)]`, `What do you think about the amount of information delivered in the newsletter? [Nowhere near enough (I needed a lot more information)]`),
+    digits = list(
+      all_categorical() ~ c(0, 1),
+      all_continuous() ~ c(1,1)
+      ),
+  #  type = c(`What do you think about the amount of information delivered in the newsletter? [Way too much (I will forget a lot of it and may need to read the entire newsletter again)]`) ~ "continuous",
+    statistic = list(
+     `What do you think about the amount of information delivered in the newsletter? [Way too much (I will forget a lot of it and may need to read the entire newsletter again)]` ~ "{mean} ({sd})",
+      `What do you think about the amount of information delivered in the newsletter? [A little too much (I will have to re-read some sections)]` ~ "{mean} ({sd})",
+      `What do you think about the amount of information delivered in the newsletter? [Just right (I felt like I took most of it in)]` ~ "{mean} ({sd})",
+      `What do you think about the amount of information delivered in the newsletter? [Not quite enough (I could have learned more)]` ~ "{mean} ({sd})",
+`What do you think about the amount of information delivered in the newsletter? [Nowhere near enough (I needed a lot more information)]` ~ "{mean} ({sd})",
+#    `What do you think about the amount of information delivered in the newsletter? [Way too much (I will forget a lot of it and may need to read the entire newsletter again)]` ~ "{median} ({p25}, {p75})",
+ #   `I will have to re-read some sections` ~ "{median} ({p25}, {p75})",
+ #    `I felt like I took most of it in` ~ "{median} ({p25}, {p75})",
+ #   `I could have learned more` ~ "{median} ({p25}, {p75})",
+ #   `I needed a lot more information` ~ "{median} ({p25}, {p75})",
+      all_categorical() ~ "{n} ({p})"
+    ),
+    label = list(
+      `What do you think about the amount of information delivered in the newsletter? [Way too much (I will forget a lot of it and may need to read the entire newsletter again)]` ~ "I will forget a lot of it and may need to read the entire newsletter again",
+      `What do you think about the amount of information delivered in the newsletter? [A little too much (I will have to re-read some sections)]` ~ "I will have to re-read some sections",
+       `What do you think about the amount of information delivered in the newsletter? [Just right (I felt like I took most of it in)]` ~ "I felt like I took most of it in",
+       `What do you think about the amount of information delivered in the newsletter? [Not quite enough (I could have learned more)]` ~ "I could have learned more",
+       `What do you think about the amount of information delivered in the newsletter? [Nowhere near enough (I needed a lot more information)]` ~ "I needed a lot more information"
+      
+    )
+  )
+
+#my_theme_tbl <- Newsletter_feedback_form_Responses_ %>%
+fitflexibletabletopage <- function(ft, pgwidth = 6) {
+  ft_out <- ft %>% autofit()
+  ft_out <- width(ft_out, width = dim(ft_out)$widths*pgwidth / (flextable_dim(ft_out)$widths))
+  return(ft_out)
+} 
+ #m
+k_theme_tbl %>%
+  modify_caption("<div style='text-align: left; font-weight: bold; color:black'> Table 4. Content Quantity</div>")%>%
+  as_gt () %>%
+  gt::tab_options(table.font.names = "Arial", table.align = "left", table.width = 830)
+
+
+
+```
+
+The majority of respondents (62.5%) disagreed that they would 'have to re-read some sections' (Table 4).  On average, across JDAC, participants agreed that the quantity of content included in the JDAC newsletter was 'Just right (I felt like I took most of it in)' (mean = 3.92) (Fig. 4).
+
+```{r, echo=FALSE}
+
+library(ggplot2)
+
+
+
+
+p <- ggplot(data=i, aes(x=v, y=value), alpha = 1.0)+
+  geom_bar(stat="identity", fill = "#3f366d")+coord_flip()+ggtitle("Fig. 4 Quantity")+xlab("")+ylab("Mean Scores")+ 
+
+  
+    theme_bw() +
+
+#p
+
+
+#gp <- ggplotly() %>% config(collaborate=FALSE, cloud=FALSE, displaylogo=FALSE, modeBarButtonsToRemove=c("select2d", "sendDataToCloud", "pan2s", "resetScale2d", "hoverClosestCartesian", "hoverCompareCartesian", "lasso2d", "zoomIn2d", "zoomOut2d"))
+
+#gp <- layout(gp, margin=list(t=75))
+#gp
+#ggplotly(p)
+
+theme(plot.title = element_text(hjust = 0)) +
+  theme(plot.subtitle = element_text(hjust = 0))+
+  theme(plot.title = element_text(size=10, family="arial"))+
+theme(plot.caption = element_text(size=8, family="arial"))+
+  theme(axis.text = element_text(size = 7, family="arial"))+
+  theme(axis.title = element_text(size = 9, family="arial"))
+
+ggplotly(p) %>%
+  layout(title = list(text = paste0("Fig. 4 Quantity",
+                                    "<br>",
+                                    "<sup>",
+                                    "Amount of Information", "</sup>")))
+
+```
+
+However, on average, participants disagreed that the quantity of content included in the JDAC newsletter was 'Nowhere near enough (I needed a lot more information)' (mean = 1.8); 'Way too much (I will forget a lot of it and may need to read the entire newsletter again)' (mean= 2.0); 'A little too much (I will have to re-read some sections)' (mean = 2.2) and 'Not quite enough (I could have learned more)' (mean = 2.3).  
+
+Suggestions to improve content focusing on more personable features that concentrate on re-introducing/ introducing members of the team:
+
+*"... an intro to others already on the team, especially with the merging of some teams it would be good to have it so its not just new joiners and SMT"*
+
+*"Good news stories would be nice to include and a message from someone in the team (not necessarily G6 or SLT) - potentially something they learnt"*
+
+*"More personable (back stories/personalities)"*
+
+
+Respondents also expressed an interest in regular updates for each DD led team and a reduction in the number of signposting links to streamline content:
+
+*"Short weekly update for each DD led team"*
+
+*"There are a LOT of different links and sections; I think it would be helpful to cut it down to the weekly priorities and any important notices (including new joiners). DGA used to have an intranet - maybe we can resurrect that as somewhere where all the team/corporate info is signposted?... removing the need for quite so many links"*
+
+
+
+```{r, echo=FALSE}
+
+```
+
+
+### <span style="color:#3f366d">Satisfaction</span>
+
+The median response of participants was 4.0 of 5.0 (3.0 - 4.0) (Table 5).  
+```{r, echo=FALSE}
+library(dplyr)
+library(here)
+library(tidyverse)
+library(kableExtra)
+library(gtsummary)
+library(AER)
+library(readxl)
+
+Newsletter_feedback_form_Responses_ <- read_excel("C:/Users/katrina.ihebunezie/Downloads/Newsletter feedback form (Responses).xlsx")
+
+ppp_theme_tbl <-
+Newsletter_feedback_form_Responses_ %>%
+  tbl_summary(
+    include = c(`How satisfied were you overall with the content?`, `How likely are you to recommend this newsletter to your colleagues?`),
+    digits = list(
+      all_categorical() ~ c(0, 1),
+      all_continuous() ~ c(1,1)
+      ),
+    type = c(`How satisfied were you overall with the content?`, `How likely are you to recommend this newsletter to your colleagues?`) ~ "continuous",
+    statistic = list(
+    #  `How satisfied were you overall with the content?` ~ "{mean} ({sd})",
+   # `How likely are you to recommend this newsletter to your colleagues?` ~ "{mean} ({sd})",
+      all_categorical() ~ "{n} ({p})"
+    ),
+    label = list(
+      `How satisfied were you overall with the content?` ~ "Satisfaction",
+      `How likely are you to recommend this newsletter to your colleagues?` ~ "Recommendations"
+    )
+  )
+
+ppp_theme_tbl %>%
+  modify_caption("<div style='text-align: left; font-weight: bold; color:black'> Table 5. Satisfaction and Recommendations</div>")%>%
+  as_gt () %>%
+  gt::tab_options(table.font.names = "Arial", table.align = "left", table.width = 830)
+
+```
+
+The majority of respondents across teams were satisfied with the content of the JDAC newsletter (mean = 3.6) (Fig. 5).
+
+```{r, echo=FALSE}
+c <- data %>% group_by (`Please tell us which team you work with`) %>% summarise(`Satisfaction by Teams` = mean(`How satisfied were you overall with the content?`)) %>% ggplot(aes(x = `Please tell us which team you work with`, y = `Satisfaction by Teams`, fill = `Please tell us which team you work with`)) + 
+    geom_bar(stat = "identity") +
+      scale_fill_manual(values = c("#3f366d", "#395d9c", "#3497a9", "#60ceac", "#dead53", "#b2182b")) + 
+
+theme_bw() +
+  theme(legend.position = "none")+
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+
+  labs(title = "Fig. 5 Satisfaction with JDAC Newsletter Content",
+       x = "Team",
+       y = "Mean Satisfaction Scores",
+       caption = "Question: 'How satisfied were you overall with the content?'. Scores ranged from '1 = Poor' to '5 = Excellent'")+
+  theme(plot.caption = element_text(hjust = 0))+
+  theme(plot.subtitle = element_text(hjust = 0))+
+  theme(plot.title = element_text(size=10, family="arial"))+
+theme(plot.caption = element_text(size=8, family="arial"))+
+  theme(axis.text = element_text(size = 7, family="arial"))+
+  theme(axis.title = element_text(size = 9, family="arial"))
+
+c
+
+
+
+
+```
+<br> Strategy Ops and Engagement, Data Ops and SitCen scored highest while Thematic Analysis scoring lowest on average.  This indicates although the newsletter is adequately meeting the needs of the audience, there may still be an opportunity to improve it, with more targeted content focused on the Thematic Analysis team.
+
+### <span style="color:#3f366d">Recommendations</span>
+
+Findings highlight that most of the participants across JDAC would highly recommend the newsletter (median of 6.5 (5.0 - 8.0) and a mean of 6.4) (Table 5, Fig. 6.0).  
+```{r, echo=FALSE}
+a <- data %>% group_by (`Please tell us which team you work with`) %>% summarise(`Recommendation by Teams` = mean(`How likely are you to recommend this newsletter to your colleagues?`)) %>% ggplot(aes(x = `Please tell us which team you work with`, y = `Recommendation by Teams`, fill = `Please tell us which team you work with`)) + 
+    geom_bar(stat = "identity") +
+      scale_fill_manual(values = c("#3f366d", "#395d9c", "#3497a9", "#60ceac", "#dead53", "#b2182b")) + 
+
+theme_bw() +
+  theme(legend.position = "none")+
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+
+  labs(title = "Fig. 6 The Likeliness of Recommending the JDAC Newsletter to Colleagues",
+       x = "Team",
+       y = "Mean Recommendation Score",
+       caption = "Respondents were asked 'How likely are you to recommend this newsletter to your colleagues?' on a 10 point scale")+
+  theme(plot.caption = element_text(hjust = 0))+
+  theme(plot.subtitle = element_text(hjust = 0))+
+  theme(plot.title = element_text(size=10, family="arial"))+
+theme(plot.caption = element_text(size=8, family="arial"))+
+  theme(axis.text = element_text(size = 7, family="arial"))+
+  theme(axis.title = element_text(size = 9, family="arial"))
+
+a
+```
+
+The Strategy Ops and Engagement, SitCen and Thematic Analysis teams scored highest while International and Foresight scored lowest on average.  This indicates although the newsletter is satisfactorily meeting the needs of our customers, redesigning it, specifically targeting more content on the International and Foresight as well as Data Science teams may prove beneficial.
+
+```{r, echo=FALSE}
+
+```
+## <span style="color:#3f366d">Conclusion</span>
+
+Most teams expressed interest in the JDAC newsletter and among those most interested were the Strategy Ops and Engagement, SitCen and Thematic Analysis teams.  The need to redesign some of the newsletter's content to prioritise newer, fresher and more useful content for JDAC that is specifically more attentive of the interests of the International and Foresight, SitCen and Data Science teams was highlighted.  Although, teams across JDAC found the newsletter included the 'right' quantity of information, specific areas of potential appeal that were identified in the survey included focusing on more personable features that concentrate on re-introducing/ introducing members of the team; regular updates for each DD led team and a reduction in the number of signposting links to streamline content.  Furthermore, while most respondents found the SMT updates and JDAC priorities/ links most relevant to their job role and appreciated the inclusion of the ‘introductions to new starters’ feature, some expressed less interest in updates from the G6.  This may relate to the readership patterns reported across JDAC.  Although relatively low numbers of respondents across JDAC read the newsletter infrequently, readership may be broadened across JDAC by targeted content and engagement towards teams that felt the newsletter was less relevant to their roles or interests.
+
+The JDAC Newsletter survey was found to be a valuable instrument to assess the knowledge, practice and potential barriers that may be encountered during situational crises whilst transforming data into intelligence and actionable insight through efficient information sharing.  Information gathered from the administration of this survey will assist the Senior Leadership Team to identify potential barriers to data sharing and surveillance that exist in order to improve its implementation in practice.  Although the findings of this survey may not be generalisable, they may be of interest to staff across JDAC.
